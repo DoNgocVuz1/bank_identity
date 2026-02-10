@@ -40,4 +40,8 @@ public class TestController {
                 "Xin chào " + userDetails.getUsername() + "! Bạn đã authenticated."
         ));
     }
+    @GetMapping("/test")
+    public ResponseEntity<?> test() {
+        return ResponseEntity.ok(new MessageResponse("API hoạt động!"));
+    }
 }

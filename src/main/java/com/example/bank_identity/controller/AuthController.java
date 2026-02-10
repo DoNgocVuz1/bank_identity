@@ -57,9 +57,4 @@ public class AuthController {
                 userDetails.getAuthorities().iterator().next().getAuthority()
         ));
     }
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test() {
-        return ResponseEntity.ok(new MessageResponse("API hoạt động!"));
-    }
 }
