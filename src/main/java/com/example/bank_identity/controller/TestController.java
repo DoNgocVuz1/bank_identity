@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-@PreAuthorize("hasRole('ADMIN')")
 @RestController
 @RequestMapping("api/test")
 @RequiredArgsConstructor
 public class TestController {
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/protected")
     public ResponseEntity<?> protectedEndpoint() {
         return ResponseEntity.ok(new MessageResponse(
@@ -46,6 +47,8 @@ public class TestController {
     public ResponseEntity<?> test() {
         return ResponseEntity.ok(new MessageResponse("API hoạt động!"));
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/admin-only")
     public ResponseEntity<?> adminOnly(){
         return ResponseEntity.ok("Chỉ admin mới truy cập được");
