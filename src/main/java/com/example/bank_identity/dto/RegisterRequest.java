@@ -14,6 +14,4 @@ public class RegisterRequest {
     @NotBlank(message = "Vui lòng nhập mật khẩu")
     @Size(min = 8, message = "Mật khẩu tối thiểu 8 kí tự")
     private  String password;
-
-    private String role = "ROLE_USER";
 }

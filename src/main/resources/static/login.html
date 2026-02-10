@@ -31,6 +31,10 @@
         const data = await response.json();
         document.getElementById('result').innerHTML =
             '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('role', data.role);
     });
 </script>
 </body>
