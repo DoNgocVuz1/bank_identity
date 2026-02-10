@@ -8,11 +8,13 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
@@ -30,9 +32,17 @@ public class JwtUtil {
     public String generateJwtToken(Authentication authentication) {
         CustomUserDetails userPrincipal = (CustomUserDetails) authentication.getPrincipal();
 
+        String role = userPrincipal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        Long userId = userPrincipal.getId();
+
         return Jwts.builder()
                 .subject(userPrincipal.getUsername())
                 .issuedAt(new Date())
+                .claim("role", role)        // Thêm role vào token
+                .claim("userId", userId)    // Thêm userId vào token
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey())
                 .compact();

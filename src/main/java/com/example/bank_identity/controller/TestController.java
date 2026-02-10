@@ -4,6 +4,7 @@ import com.example.bank_identity.dto.MessageResponse;
 import com.example.bank_identity.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+@PreAuthorize("hashRole('ADMIN')")
 @RestController
 @RequestMapping("api/test")
 @RequiredArgsConstructor
@@ -43,5 +45,9 @@ public class TestController {
     @GetMapping("/test")
     public ResponseEntity<?> test() {
         return ResponseEntity.ok(new MessageResponse("API hoạt động!"));
+    }
+    @GetMapping("/admin-only")
+    public ResponseEntity<?> adminOnly(){
+        return ResponseEntity.ok("Chỉ admin mới truy cập được");
     }
 }
