@@ -52,9 +52,18 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .authorizeHttpRequests(auth -> auth
+
+                        //Cái này ko cần đăng nhập
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/login.html", "/", "/static/**", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/api/test/**").authenticated()
+
+                        //Chỉ admin mới truy cập được
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        //User và Admin đều truy cp được
+                        .requestMatchers("/api/test/**").hasAnyRole("USER", "ADMIN")
+
+                        //Tất cả request khác đều phải authenticated
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
