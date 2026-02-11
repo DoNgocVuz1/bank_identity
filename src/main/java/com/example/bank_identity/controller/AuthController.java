@@ -1,5 +1,12 @@
 package com.example.bank_identity.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import com.example.bank_identity.dto.JwtResponse;
 import com.example.bank_identity.dto.LoginRequest;
 import com.example.bank_identity.dto.MessageResponse;
@@ -16,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Authentication", description = "API xác thực - đăng ký & đăng nhập")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -25,6 +33,11 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
+    @Operation(summary = "Đăng ký tài khoản", description = "Tạo tài khoản user mới")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Đăng ký thành công"),
+            @ApiResponse(responseCode = "400", description = "Username đã tồn tại hoặc thông tin không hợp lệ")
+    })
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         try {
@@ -36,6 +49,11 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Đăng nhập", description = "Đăng nhập và nhận JWT token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Đăng nhập thành công, trả về JWT token"),
+            @ApiResponse(responseCode = "401", description = "Sai username hoặc password")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(

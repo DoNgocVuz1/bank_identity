@@ -57,6 +57,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/login.html", "/", "/static/**", "/css/**", "/js/**").permitAll()
 
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui.html").permitAll()
+
                         //Chỉ admin mới truy cập được
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
