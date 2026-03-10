@@ -28,3 +28,20 @@ server:
 jwt:
   secret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
   expiration: 86400000
+
+  logging:
+    level:
+      root: INFO
+      com.example.bank_identity: DEBUG
+      com.example.bank_identity.security: INFO
+      org.springframework.security: WARN
+      org.hibernate.SQL: WARN
+    pattern:
+      console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+      file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file:
+      name: logs/bank-identity.log
+    logback:
+      rollingpolicy:
+        max-file-size: 10MB
+        max-history: 30

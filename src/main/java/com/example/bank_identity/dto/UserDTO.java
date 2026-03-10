@@ -12,4 +12,5 @@ public class  UserDTO {
     private String username;
     private String role;
     private Boolean enabled;
+    //ko trả pass do bảo mật
 }

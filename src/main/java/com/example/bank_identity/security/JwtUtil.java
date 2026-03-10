@@ -6,6 +6,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class JwtUtil {
 
@@ -57,24 +59,35 @@ public class JwtUtil {
                 .getSubject();
     }
 
+    public long getExpirationFromToken(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration()
+                .getTime();
+    }
+
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser()
-                    .verifyWith(getSigningKey())
+                    .verifyWith(getSigningKey()) // dùng secret key để verify chữ ký
                     .build()
-                    .parseSignedClaims(authToken);
-            return true;
-        } catch (MalformedJwtException e) {
-            System.err.println("Invalid JWT token: " + e.getMessage());
-        } catch (ExpiredJwtException e) {
-            System.err.println("JWT token is expired: " + e.getMessage());
+                    .parseSignedClaims(authToken);// parse và check luôn
+            return true;//ok rồi thì trả
+
+        } catch (MalformedJwtException e) { // token sai format, không phải JWT hợp lệ
+            log.warn("[JwtUtil] Token sai format: {}", e.getMessage());
+        } catch (ExpiredJwtException e) {// token hết hạn
+            log.warn("[JwtUtil] Token đã hết hạn: {}",e.getMessage());
         } catch (UnsupportedJwtException e) {
-            System.err.println("JWT token is unsupported: " + e.getMessage());
+            log.warn("[JwtUtil] Token không được hỗ trợ: {}",e.getMessage());
         } catch (IllegalArgumentException e) {
-            System.err.println("JWT claims string is empty: " + e.getMessage());
-        } catch (SignatureException e) {
-            System.err.println("Invalid JWT signature: " + e.getMessage());
+            log.warn("[JwtUtil] Token rỗng hoặc null: {}", e.getMessage());
+        } catch (SignatureException e) { // chữ ký sai, có thể bị giả mạo
+            log.warn("[JwtUtil] Chữ ký token không hợp lệ: {}", e.getMessage());
         }
-        return false;
+        return false;// có lỗi, không hợp lệ
     }
 }

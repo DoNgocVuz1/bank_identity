@@ -17,7 +17,9 @@ public class CustomUserDetails implements UserDetails {
     private Long id;
     private String username;
     private String password;
+
     private Collection<? extends GrantedAuthority> authorities;
+    private boolean enabled;
 
     public static CustomUserDetails build(User user){
 
@@ -27,7 +29,8 @@ public class CustomUserDetails implements UserDetails {
                 user.getId(),
                 user.getUsername(),
                 user.getPassword(),
-                Collections.singletonList(authority)
+                Collections.singletonList(authority),
+                user.getEnabled()
         );
     }
 
@@ -63,9 +66,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public  boolean isEnabled(){
-        return true;
+        return enabled;
     }
-
-
-
 }

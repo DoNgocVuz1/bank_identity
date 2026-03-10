@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Tag(name = "Test Endpoints", description = "API test cho các endpoint cần authentication")
-@SecurityRequirement(name = "bearer-jwt")
+@SecurityRequirement(name = "Bearer Authentication")
 @RestController
 @RequestMapping("api/test")
 @RequiredArgsConstructor

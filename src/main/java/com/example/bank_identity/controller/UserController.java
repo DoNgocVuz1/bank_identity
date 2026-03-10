@@ -46,9 +46,10 @@ public class UserController {
     @Operation(summary = "Xem thông tin user theo username",
             description = "Admin xem được tất cả, User chỉ xem được của mình")
     public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
-        // Lấy thông tin user đang login
+
+        // Lấy thông tin người đang gọi API từ SecurityContext
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = auth.getName();
+        String currentUsername = auth.getName(); // username của người đang gọi
         boolean isAdmin = auth.getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
@@ -98,10 +99,11 @@ public class UserController {
     @Operation(summary = "Xóa user", description = "Chỉ admin mới được xóa user")
     public ResponseEntity<?> deleteUser(@PathVariable String username) {
         try {
-            // Không cho xóa chính mình
+            // Lấy username của admin đang gọi
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String currentUsername = auth.getName();
 
+            // Không cho admin tự xóa chính mình
             if (currentUsername.equals(username)) {
                 return ResponseEntity.badRequest()
                         .body(new MessageResponse("Không thể xóa chính mình"));

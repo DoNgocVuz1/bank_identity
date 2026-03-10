@@ -4,10 +4,12 @@ package com.example.bank_identity.config;
 import com.example.bank_identity.entity.User;
 import com.example.bank_identity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
@@ -24,7 +26,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setEnabled(true);
 
             userRepository.save(admin);
-            System.out.println("Đã tạo user admin, username: admin, password: admin123");
+            log.info("Đã tạo user admin, username: admin, password: admin123");
         }
         if (!userRepository.existsByUsername("user")) {
             User user = new User();
@@ -34,7 +36,7 @@ public class DataInitializer implements CommandLineRunner {
             user.setEnabled(true);
 
             userRepository.save(user);
-            System.out.println("Đã tạo user thường, username: user, password: user123");
+            log.info("Đã tạo user thường, username: user, password: user123");
         }
     }
 }

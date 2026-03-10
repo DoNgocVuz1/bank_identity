@@ -4,7 +4,7 @@ package com.example.bank_identity.service;
 import com.example.bank_identity.dto.RegisterRequest;
 import com.example.bank_identity.entity.User;
 import com.example.bank_identity.repository.UserRepository;
-
+import com.example.bank_identity.exception.UsernameAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class AuthService {
 
     public User registerUser(RegisterRequest request){
         if (userRepository.existsByUsername(request.getUsername())){
-            throw new RuntimeException("Tên tài khoản đã tồn tại!");
+            throw new UsernameAlreadyExistsException(request.getUsername());
         }
         User user = new User();
         user.setUsername(request.getUsername());
